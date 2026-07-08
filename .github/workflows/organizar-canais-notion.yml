@@ -1,0 +1,30 @@
+name: Organizar canais do Notion
+
+on:
+  schedule:
+    # 01:00 America/Sao_Paulo = 04:00 UTC.
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  organizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      NOTION_PAGE_ID: 37369fad70728003b13ef89eef602f48
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+
+      - name: Organizar canais
+        run: node automacoes/notion-canais/organizar-canais-notion.js
